@@ -1,0 +1,15 @@
+# 若设置为true则会在控制台输出debug信息
+debug: false
+
+menu:
+  title: "&6{type}合成表"
+  prev:
+    type: ARROW
+    name: "&6上一页"
+    lore: []
+    custom_model_data: -1
+  next:
+    type: ARROW
+    name: "&6下一页"
+    lore: []
+    custom_model_data: -1

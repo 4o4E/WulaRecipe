@@ -1,0 +1,43 @@
+prefix: "&7[&aWulaRecipe&7]"
+debug_prefix: "&7[&aWulaRecipeDebug&7]"
+
+debug:
+  console_enable: "&f已临时(修改config.yml永久设置)&a启用&bDebug&f, 下次重启前你将会收到&bDebug&f消息, 再使用一次此指令以&c禁用"
+  console_disable: "&f已临时(修改config.yml永久设置)&c禁用&bDebug&f, 下次重启前你不会收到&bDebug&f消息, 再使用一次此指令以&a启用"
+  player_enable: "&f已&a启用&bDebug&f, 你将会收到&bDebug&f消息, 再使用一次此指令以&c禁用"
+  player_disable: "&f已&c禁用&bDebug&f, 你不会收到&bDebug&f消息, 再使用一次此指令以&a启用"
+
+  menu:
+    on_pickup: "玩家{player}交互(pickup)了菜单的第{slot}个格子(clicked: {clicked})"
+    on_putin: "玩家{player}交互(putin)了菜单的第{slot}个格子(cursor: {cursor})"
+    on_switch: "玩家{player}交互(switch)了菜单的第{slot}个格子(clicked: {clicked}, cursor: {cursor})"
+    on_click: "玩家{player}交互(click)了菜单的第{slot}个格子"
+
+message:
+  noperm: "&c无权限"
+  non_player: "&c仅玩家可用"
+  unknown_command: "&c未知指令"
+  invalid_args: "&c无效参数"
+  invalid_player: "&c玩家离线或不存在"
+  invalid_regex: "&c错误的正则"
+  empty_handed: "&c手持合成材料右键点击以添加物品, 左键点击以取出物品"
+  empty_machine: "&c{machine}中没有已添加的物品, 右键点击以添加物品, 左键点击以取出物品"
+  invalid_machine: "&c没有名为{machine}的工作方块"
+  no_such_recipe: "&c没有匹配的合成表"
+  craft_fail: "&c合成表{recipe}合成失败, 请联系管理"
+
+hook:
+  enable: "扫描到依赖{plugin}, 已启用相关支持"
+  disable: "未扫描到依赖{plugin}, 已禁用"
+
+command:
+  reload_done: "&a重载完成"
+  summon_done: "&a召唤完成"
+  open:
+    empty: "&c类型为{type}的合成表中没有可以展示给玩家{player}的项目"
+
+  usage:
+    debug: "&a/wr debug &f切换debug消息的接受与否"
+    reload: "&a/wr reload &f重载配置文件"
+    open: "&a/wr open <机器id> <玩家名> &f给玩家打开对应类别的合成表菜单"
+    summon: "&a/wr summon <机器id> <玩家名> &f给玩家召唤对应的机器"

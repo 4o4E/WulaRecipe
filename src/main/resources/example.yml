@@ -1,0 +1,32 @@
+# 机器信息, 机器id为文件名
+machine:
+  # 机器显示名字
+  name: xxx
+  # 机器使用的模型名字
+  model: xxx
+  # 机器合成时播放的动画id
+  animation: xxx
+  # 合成动画持续时长, 单位tick
+  animation_duration: 20
+
+# 属于机器的合成表
+recipes:
+  # 合成表id, 必须全局唯一
+  # 使用权限 wularecipe.use.{id}
+  example_recipe:
+    # 回调指令
+    command: "minecraft:tell %player_name% awa"
+    # 输入
+    in:
+      - type: mi
+        category: SWORD
+        id: IRON_SWORD
+      - type: ia
+        namespaceId: sword:SWORD
+      - type: mc
+        id: IRON_SWORD
+    # 输出
+    out:
+      type: mi
+      category: SWORD
+      id: EXAMPLE_SWORD

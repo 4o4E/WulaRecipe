@@ -1,0 +1,21 @@
+name: WulaRecipe
+version: "${version}"
+main: top.e404.wularecipe.WulaRecipe
+api-version: 1.13
+depend:
+  - MMOItems
+  - ItemsAdder
+  - Adyeshach
+  - OrangeEngine
+  - PlaceholderAPI
+authors:
+  - 404E
+commands:
+  wularecipe:
+    description: 插件主命令
+    aliases:
+      - wr
+permissions:
+  wularecipe.admin:
+    default: op
+    description: 允许使用插件指令
