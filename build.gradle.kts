@@ -15,8 +15,6 @@ fun eplugin(id: String, version: String = epluginVersion) = "top.e404:eplugin-$i
 
 repositories {
     mavenLocal()
-    // spigot
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/groups/public/")
     // paper
     maven("https://repo.papermc.io/repository/maven-public/")
@@ -34,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    // spigot
+    // paper
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     // adventure
     implementation("net.kyori:adventure-api:4.12.0")
