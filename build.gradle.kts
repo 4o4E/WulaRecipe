@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "top.e404"
-version = "1.0.2"
+version = "1.0.3"
 val epluginVersion = "1.0.5"
 
 fun kotlinx(id: String, version: String) = "org.jetbrains.kotlinx:kotlinx-$id:$version"
