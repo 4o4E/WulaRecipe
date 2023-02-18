@@ -13,3 +13,7 @@ menu:
     name: "&6下一页"
     lore: []
     custom_model_data: -1
+
+# 不允许作为合成素材放入工作方块的物品DisplayName
+exclude:
+  - 菜单

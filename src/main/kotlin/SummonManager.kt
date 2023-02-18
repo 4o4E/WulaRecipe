@@ -13,9 +13,11 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitTask
+import top.e404.eplugin.EPlugin.Companion.removeColor
 import top.e404.eplugin.listener.EListener
 import top.e404.eplugin.util.execAsCommand
 import top.e404.eplugin.util.giveStickItem
+import top.e404.wularecipe.config.Config
 import top.e404.wularecipe.config.Lang
 import top.e404.wularecipe.config.Machine
 import top.e404.wularecipe.hook.AdyHook
@@ -85,6 +87,13 @@ class SummonObject(
         val item = event.player.inventory.itemInMainHand
         if (item.type.isAir) {
             PL.sendMsgWithPrefix(player, Lang["message.empty_handed"])
+            event.isCancelled = true
+            return
+        }
+        @Suppress("DEPRECATION")
+        if (item.itemMeta.hasDisplayName()
+            && item.itemMeta.displayName.removeColor() in Config.config.exclude
+        ) {
             event.isCancelled = true
             return
         }
