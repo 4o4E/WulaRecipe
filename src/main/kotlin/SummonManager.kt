@@ -57,12 +57,16 @@ object SummonManager : EListener(PL) {
 
     @EventHandler
     fun AdyeshachEntityInteractEvent.onEvent() {
-        map[player]?.onRightClick(this)
+        map[player]?.let {
+            if (it.entityInstance == entity) it.onRightClick(this)
+        }
     }
 
     @EventHandler
     fun AdyeshachEntityDamageEvent.onEvent() {
-        map[player]?.onLeftClick(this)
+        map[player]?.let {
+            if (it.entityInstance == entity) it.onLeftClick(this)
+        }
     }
 
     @EventHandler
