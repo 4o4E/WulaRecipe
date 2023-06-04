@@ -14,15 +14,14 @@ import org.bukkit.command.CommandSender
 import org.bukkit.inventory.ItemStack
 import top.e404.eplugin.EPlugin.Companion.color
 import top.e404.eplugin.config.serialization.MaterialSerializer
+import top.e404.eplugin.hook.mmoitems.equals
+import top.e404.eplugin.hook.mmoitems.id
 import top.e404.eplugin.menu.Displayable
-import top.e404.eplugin.util.asMutableList
 import top.e404.eplugin.util.editItemMeta
 import top.e404.wularecipe.PL
 import top.e404.wularecipe.display
 import top.e404.wularecipe.hook.IaHook
 import top.e404.wularecipe.hook.MiHook
-import top.e404.wularecipe.hook.MiHook.equals
-import top.e404.wularecipe.hook.MiHook.id
 import top.e404.eplugin.util.matches as trMatches
 
 object RecipeManager {
@@ -88,12 +87,6 @@ data class Recipe(
     @SerialName("out")
     val output: Item,
 ) : Displayable {
-    companion object {
-        private val config by lazy {
-            JoinConfiguration.builder().separator(Component.text(" &7+ ".color())).build()
-        }
-    }
-
     private val formattedInput by lazy {
         input.flatMap { i ->
             if (i.amount <= 1) arrayListOf(i)
@@ -107,12 +100,15 @@ data class Recipe(
 
     override val item: ItemStack
         get() = output.toItemStack().editItemMeta {
-            val lore = lore()?.asMutableList() ?: mutableListOf()
-            val component = input.map {
-                it.toItemStack().display().append(Component.text("&fx&b${it.amount}".color()))
-            }.let { Component.join(config, it) }
-            lore.add(0, Component.text("&f合成方式: ".color()).append(component))
-            lore.add(1, Component.text(""))
+            val prefix = Config.config.prefix
+            val lore = mutableListOf<Component>()
+            lore.add(Component.text("${prefix}&f合成方式: ".color()))
+            input.forEach {
+                val component = it.toItemStack().display().append(Component.text("&fx&b${it.amount}".color()))
+                lore.add(Component.text(prefix).append(component))
+            }
+            lore.add(Component.text(""))
+            lore()?.let { lore.addAll(it) }
             lore(lore)
         }
 

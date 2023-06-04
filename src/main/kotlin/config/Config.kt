@@ -30,6 +30,7 @@ object Config : ESerializationConfig<ConfigData>(
 @Serializable
 data class ConfigData(
     var debug: Boolean,
+    val prefix: String,
     var menu: Menu,
     val exclude: List<String> = emptyList()
 )

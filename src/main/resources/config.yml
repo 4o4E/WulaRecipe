@@ -1,6 +1,9 @@
 # 若设置为true则会在控制台输出debug信息
 debug: false
 
+# 排版前缀
+prefix: "        "
+
 menu:
   title: "&6{type}合成表"
   prev:
