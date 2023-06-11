@@ -39,7 +39,9 @@ object Open : ECommand(
             plugin.sendMsgWithPrefix(sender, Lang["message.invalid_machine", "machine" to type])
             return
         }
-        val list = machine.recipes
+        val list = machine.recipes.filter { (id, _) ->
+            p.hasPermission("wularecipe.use.$id")
+        }
         if (list.isEmpty()) {
             plugin.sendMsgWithPrefix(sender, Lang["command.open.empty", "type" to type, "player" to player])
             return

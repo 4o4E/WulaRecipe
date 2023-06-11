@@ -2,15 +2,15 @@ package top.e404.wularecipe.config
 
 import kotlinx.serialization.Serializable
 import org.bukkit.inventory.ItemStack
-import top.e404.eplugin.config.ESerializationConfig
-import top.e404.eplugin.config.JarConfig
+import top.e404.eplugin.config.JarConfigDefault
+import top.e404.eplugin.config.KtxConfig
 import top.e404.wularecipe.PL
 import top.e404.wularecipe.serialization.ItemStackSerializer
 
-object Config : ESerializationConfig<ConfigData>(
+object Config : KtxConfig<ConfigData>(
     plugin = PL,
     path = "config.yml",
-    default = JarConfig(PL, "config.yml"),
+    default = JarConfigDefault(PL, "config.yml"),
     serializer = ConfigData.serializer(),
     format = defaultYaml
 ) {

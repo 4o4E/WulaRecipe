@@ -35,7 +35,7 @@ class WulaRecipe : EPlugin() {
 
     override fun onDisable() {
         SummonManager.close()
-        MenuManager.close()
+        MenuManager.shutdown()
         cancelAllTask()
         info("&a卸载完成")
     }

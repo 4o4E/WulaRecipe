@@ -3,18 +3,18 @@ package top.e404.wularecipe.menu
 import org.bukkit.event.inventory.InventoryClickEvent
 import top.e404.eplugin.EPlugin.Companion.placeholder
 import top.e404.eplugin.menu.Displayable
-import top.e404.eplugin.menu.menu.Menu
+import top.e404.eplugin.menu.menu.ChestMenu
 import top.e404.wularecipe.PL
 import top.e404.wularecipe.config.Config
 
 class ViewMenu(
     type: String,
     list: MutableList<Displayable>,
-) : Menu(
+) : ChestMenu(
     plugin = PL,
     row = 6,
     title = Config.config.menu.title.placeholder("type" to type),
-    self = false
+    allowSelf = false
 ) {
     val zone: ViewZone
     val prev: PrevButton

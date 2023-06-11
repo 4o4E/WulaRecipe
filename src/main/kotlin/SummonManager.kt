@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import top.e404.eplugin.EPlugin.Companion.removeColor
 import top.e404.eplugin.listener.EListener
@@ -38,7 +39,7 @@ object SummonManager : EListener(PL) {
         map[p] = SummonObject(p, entityInstance, modelEntity, machine)
     }
 
-    private fun onTick() {
+    private fun onTick(runnable: BukkitRunnable) {
         map.values.toMutableList().forEach { summon ->
             if (summon.tooFar()) map.remove(summon.player)?.remove()
         }
@@ -134,7 +135,7 @@ class SummonObject(
         clickTask = PL.runTaskLater(100, ::onCraft)
     }
 
-    fun onCraft() {
+    fun onCraft(runnable: BukkitRunnable) {
         val entry = machine.recipes.entries.firstOrNull { it.value.matches(items) }
         if (entry == null) {
             player.sendMessage(Lang["message.no_such_recipe"])

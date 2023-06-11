@@ -21,7 +21,7 @@ object Reload : ECommand(
         get() = Lang["command.usage.reload"].color()
 
     override fun onCommand(sender: CommandSender, args: Array<out String>) {
-        MenuManager.close()
+        MenuManager.shutdown()
         SummonManager.close()
         plugin.runTaskAsync {
             Config.load(null)
