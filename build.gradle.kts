@@ -68,6 +68,7 @@ tasks {
     }
 
     processResources {
+        filteringCharset = "UTF8"
         filesMatching("plugin.yml") {
             expand(project.properties)
         }
