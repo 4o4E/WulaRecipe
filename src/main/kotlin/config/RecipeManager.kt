@@ -81,9 +81,12 @@ data class MachineInfo(
 
 @Serializable
 data class Recipe(
-    val command: List<String>,
+    @SerialName("success_rate")
+    val successRate: Double = 1.0,
+    val success: List<String> = emptyList(),
+    val fail: List<String> = emptyList(),
     @SerialName("in")
-    val input: List<Item>,
+    val input: List<Item> = emptyList(),
     @SerialName("out")
     val output: Item,
 ) : Displayable {

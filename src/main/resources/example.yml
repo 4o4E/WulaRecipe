@@ -14,8 +14,14 @@ recipes:
   # 合成表id, 必须全局唯一
   # 使用权限 wularecipe.use.{id}
   example_recipe:
-    # 回调指令
-    command: "minecraft:tell %player_name% awa"
+    # 成功几率, 0.5代表50%
+    success_rate: 0.5
+    # 合成成功的回调指令
+    success:
+      - "minecraft:tell %player_name% success"
+    # 合成失败的回调指令
+    fail:
+      - "minecraft:tell %player_name% fail"
     # 输入
     in:
       - type: mi

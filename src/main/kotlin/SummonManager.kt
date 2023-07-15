@@ -24,6 +24,7 @@ import top.e404.wularecipe.config.Machine
 import top.e404.wularecipe.hook.AdyHook
 import top.e404.wularecipe.hook.OeHook
 import top.e404.wularecipe.hook.PapiHook
+import kotlin.random.Random
 
 object SummonManager : EListener(PL) {
     val map = mutableMapOf<Player, SummonObject>()
@@ -143,6 +144,23 @@ class SummonObject(
             return
         }
         val (name, recipe) = entry
+        val success = Random.nextDouble() <= recipe.successRate
+        if (!success) {
+            PL.debug { "玩家使用${machineName}合成物品, 匹配合成表${name}, 合成失败" }
+            modelEntity.playAnimation(machine.info.animation)
+            animationTask = PL.runTaskLater(machine.info.animationDuration) {
+                modelEntity.playAnimation("idle")
+                items.clear()
+                recipe.fail.forEach {
+                    try {
+                        PapiHook.placeholder(it, player).execAsCommand()
+                    } catch (e: Exception) {
+                        PL.warn("执行指令${it}时出现异常, 继续执行后续指令", e)
+                    }
+                }
+            }
+            return
+        }
         val output = try {
             recipe.output.toItemStack()
         } catch (e: Exception) {
@@ -157,7 +175,7 @@ class SummonObject(
             modelEntity.playAnimation("idle")
             items.clear()
             player.giveStickItem(output)
-            recipe.command.forEach {
+            recipe.success.forEach {
                 try {
                     PapiHook.placeholder(it, player).execAsCommand()
                 } catch (e: Exception) {
