@@ -6,7 +6,7 @@ depend:
   - MMOItems
   - ItemsAdder
   - Adyeshach
-  - OrangeEngine
+  - ModelEngine
   - PlaceholderAPI
 authors:
   - 404E
