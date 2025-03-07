@@ -13,7 +13,7 @@ object Debug : AbstractDebugCommand(
     "wularecipe.admin"
 ) {
     override val usage: String
-        get() = Lang["command.usage.debug"].color()
+        get() = Lang["command.usage.debug"].color
 
     override fun onCommand(
         sender: CommandSender,

@@ -1,14 +1,14 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "1.8.20"
-    kotlin("plugin.serialization") version "1.8.20"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version "2.1.0"
+    kotlin("plugin.serialization") version "2.1.0"
+    id("com.gradleup.shadow") version "9.0.0-beta4"
 }
 
 group = "top.e404"
 version = "1.1.0"
-val epluginVersion = "1.1.0"
+val epluginVersion = "1.4.0"
 
 fun kotlinx(id: String, version: String) = "org.jetbrains.kotlinx:kotlinx-$id:$version"
 fun eplugin(id: String, version: String = epluginVersion) = "top.e404:eplugin-$id:$version"
@@ -22,6 +22,8 @@ repositories {
     maven("https://jitpack.io")
     // mm
     maven("https://mvn.lumine.io/repository/maven-public/")
+    // mi
+    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
     // engine hub
     maven("https://maven.enginehub.org/repo/")
     // ady
@@ -33,7 +35,7 @@ repositories {
 
 dependencies {
     // paper
-    compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     // adventure
     implementation("net.kyori:adventure-api:4.12.0")
     // eplugin
@@ -43,7 +45,7 @@ dependencies {
     implementation(eplugin("hook-mmoitems"))
     implementation(eplugin("hook-itemsadder"))
     implementation(eplugin("hook-adyeshach"))
-    implementation(eplugin("hook-orangeengine"))
+    implementation(eplugin("hook-modelengine"))
     implementation(eplugin("hook-placeholderapi"))
     // serialization
     implementation(kotlinx("serialization-core-jvm", "1.3.3"))
@@ -51,22 +53,29 @@ dependencies {
     // mythic lib
     compileOnly("io.lumine:MythicLib-dist:1.4")
     // mi
-    compileOnly("net.Indyuce:MMOItems:6.7.3")
+    compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
     // itemsadder
     compileOnly("com.github.LoneDev6:api-itemsadder:3.0.0")
     // ady
     compileOnly("ink.ptms.adyeshach:all:2.0.0-snapshot-10")
     // placeholderAPI
-    compileOnly("me.clip:placeholderapi:2.11.1")
-    // oe
-    compileOnly(fileTree("libs"))
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    // placeholderAPI
+    compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.8")
+}
+
+java {
+    withSourcesJar()
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+    }
 }
 
 tasks {
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
-    }
-
     processResources {
         filteringCharset = "UTF8"
         filesMatching("plugin.yml") {

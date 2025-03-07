@@ -20,7 +20,7 @@ object Open : ECommand(
     "wularecipe.admin"
 ) {
     override val usage: String
-        get() = Lang["command.usage.open"].color()
+        get() = Lang["command.usage.open"].color
 
     override fun onCommand(sender: CommandSender, args: Array<out String>) {
         if (args.size != 3) {

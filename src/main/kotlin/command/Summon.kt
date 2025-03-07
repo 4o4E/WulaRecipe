@@ -17,7 +17,7 @@ object Summon : ECommand(
     "wularecipe.admin"
 ) {
     override val usage: String
-        get() = Lang["command.usage.summon"].color()
+        get() = Lang["command.usage.summon"].color
 
     override fun onCommand(sender: CommandSender, args: Array<out String>) {
         if (args.size != 3) {

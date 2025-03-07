@@ -1,11 +1,12 @@
 package top.e404.wularecipe
 
+import com.ticxo.modelengine.api.ModelEngineAPI
+import com.ticxo.modelengine.api.model.ActiveModel
+import com.ticxo.modelengine.api.model.ModeledEntity
 import ink.ptms.adyeshach.core.entity.EntityInstance
 import ink.ptms.adyeshach.core.entity.EntityTypes
 import ink.ptms.adyeshach.core.event.AdyeshachEntityDamageEvent
 import ink.ptms.adyeshach.core.event.AdyeshachEntityInteractEvent
-import ltd.icecold.orangeengine.api.data.model.ModelType
-import ltd.icecold.orangeengine.api.model.ModelEntity
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -22,7 +23,7 @@ import top.e404.wularecipe.config.Config
 import top.e404.wularecipe.config.Lang
 import top.e404.wularecipe.config.Machine
 import top.e404.wularecipe.hook.AdyHook
-import top.e404.wularecipe.hook.OeHook
+import top.e404.wularecipe.hook.MegHook
 import top.e404.wularecipe.hook.PapiHook
 import kotlin.random.Random
 
@@ -36,8 +37,10 @@ object SummonManager : EListener(PL) {
             exists.entityInstance.remove()
         }
         val entityInstance = AdyHook.getPrivateEntityManager(p).create(EntityTypes.SHULKER, p.location)
-        val modelEntity = OeHook.setModel(entityInstance.normalizeUniqueId, machine.info.model, ModelType.BLOCKBENCH)
-        map[p] = SummonObject(p, entityInstance, modelEntity, machine)
+        val megEntity = ModelEngineAPI.getModeledEntity(entityInstance.normalizeUniqueId)
+        val model = MegHook.getModel(machine.info.model)
+        megEntity.addModel(model, true)
+        map[p] = SummonObject(p, entityInstance, model, megEntity, machine)
     }
 
     private fun onTick(runnable: BukkitRunnable) {
@@ -80,13 +83,15 @@ object SummonManager : EListener(PL) {
 class SummonObject(
     val player: Player,
     val entityInstance: EntityInstance,
-    val modelEntity: ModelEntity,
+    val model: ActiveModel,
+    val modelEntity: ModeledEntity,
     val machine: Machine,
 ) {
     val machineName = machine.info.name
     val items = mutableListOf<ItemStack>()
     var clickTask: BukkitTask? = null
     var animationTask: BukkitTask? = null
+    val animationHandler get() = model.animationHandler
 
     fun onRightClick(event: AdyeshachEntityInteractEvent) {
         if (!event.isMainHand) return
@@ -147,9 +152,9 @@ class SummonObject(
         val success = Random.nextDouble() <= recipe.successRate
         if (!success) {
             PL.debug { "玩家使用${machineName}合成物品, 匹配合成表${name}, 合成失败" }
-            modelEntity.playAnimation(machine.info.animation)
+            animationHandler.playAnimation(machine.info.animation, 0.0, 0.0, 1.0, true)
             animationTask = PL.runTaskLater(machine.info.animationDuration) {
-                modelEntity.playAnimation("idle")
+                animationHandler.playAnimation("idle", 0.0, 0.0, 1.0, true)
                 items.clear()
                 recipe.fail.forEach {
                     try {
@@ -170,9 +175,9 @@ class SummonObject(
             return
         }
         PL.debug { "玩家使用${machineName}合成物品, 匹配合成表${name}" }
-        modelEntity.playAnimation(machine.info.animation)
+        animationHandler.playAnimation(machine.info.animation, 0.0, 0.0, 1.0, true)
         animationTask = PL.runTaskLater(machine.info.animationDuration) {
-            modelEntity.playAnimation("idle")
+            animationHandler.playAnimation("idle", 0.0, 0.0, 1.0, true)
             items.clear()
             player.giveStickItem(output)
             recipe.success.forEach {

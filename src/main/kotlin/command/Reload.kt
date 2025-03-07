@@ -18,7 +18,7 @@ object Reload : ECommand(
     "wularecipe.admin"
 ) {
     override val usage: String
-        get() = Lang["command.usage.reload"].color()
+        get() = Lang["command.usage.reload"].color
 
     override fun onCommand(sender: CommandSender, args: Array<out String>) {
         MenuManager.shutdown()

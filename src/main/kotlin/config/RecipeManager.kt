@@ -63,9 +63,9 @@ data class Machine(
 ) {
     val configuration by lazy {
         JoinConfiguration.builder()
-            .prefix(Component.text("&6${info.name}&f中已有以下物品: &7[".color()))
-            .separator(Component.text("&7, ".color()))
-            .suffix(Component.text("&7], &a等待5秒则开始合成".color()))
+            .prefix(Component.text("&6${info.name}&f中已有以下物品: &7[".color))
+            .separator(Component.text("&7, ".color))
+            .suffix(Component.text("&7], &a等待5秒则开始合成".color))
             .build()
     }
 }
@@ -105,9 +105,9 @@ data class Recipe(
         get() = output.toItemStack().editItemMeta {
             val prefix = Config.config.prefix
             val lore = mutableListOf<Component>()
-            lore.add(Component.text("${prefix}&f合成方式: ".color()))
+            lore.add(Component.text("${prefix}&f合成方式: ".color))
             input.forEach {
-                val component = it.toItemStack().display().append(Component.text("&fx&b${it.amount}".color()))
+                val component = it.toItemStack().display().append(Component.text("&fx&b${it.amount}".color))
                 lore.add(Component.text(prefix).append(component))
             }
             lore.add(Component.text(""))
