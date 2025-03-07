@@ -60,7 +60,7 @@ dependencies {
     compileOnly("ink.ptms.adyeshach:all:2.0.0-snapshot-10")
     // placeholderAPI
     compileOnly("me.clip:placeholderapi:2.11.6")
-    // placeholderAPI
+    // ModelEngine
     compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.8")
 }
 
