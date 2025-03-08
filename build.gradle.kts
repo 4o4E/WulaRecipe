@@ -35,7 +35,7 @@ repositories {
 
 dependencies {
     // paper
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     // adventure
     implementation("net.kyori:adventure-api:4.12.0")
     // eplugin
@@ -66,12 +66,12 @@ dependencies {
 
 java {
     withSourcesJar()
-    targetCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
