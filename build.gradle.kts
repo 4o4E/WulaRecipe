@@ -61,7 +61,7 @@ dependencies {
     // placeholderAPI
     compileOnly("me.clip:placeholderapi:2.11.6")
     // ModelEngine
-    compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.8")
+    compileOnly("com.ticxo.modelengine:api:R3.2.0")
 }
 
 java {
