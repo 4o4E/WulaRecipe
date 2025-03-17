@@ -3,16 +3,20 @@ package top.e404.wularecipe
 import com.ticxo.modelengine.api.ModelEngineAPI
 import com.ticxo.modelengine.api.model.ActiveModel
 import com.ticxo.modelengine.api.model.ModeledEntity
-import ink.ptms.adyeshach.core.entity.EntityInstance
-import ink.ptms.adyeshach.core.entity.EntityTypes
-import ink.ptms.adyeshach.core.event.AdyeshachEntityDamageEvent
-import ink.ptms.adyeshach.core.event.AdyeshachEntityInteractEvent
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.entity.Entity
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
+import org.bukkit.entity.Shulker
 import org.bukkit.event.EventHandler
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import top.e404.eplugin.EPlugin.Companion.removeColor
@@ -22,8 +26,6 @@ import top.e404.eplugin.util.giveStickItem
 import top.e404.wularecipe.config.Config
 import top.e404.wularecipe.config.Lang
 import top.e404.wularecipe.config.Machine
-import top.e404.wularecipe.hook.AdyHook
-import top.e404.wularecipe.hook.MegHook
 import top.e404.wularecipe.hook.PapiHook
 import kotlin.random.Random
 
@@ -34,15 +36,20 @@ object SummonManager : EListener(PL) {
         val exists = map.remove(p)
         if (exists != null) {
             exists.fail()
-            exists.entityInstance.remove()
+            exists.entity.remove()
         }
-        val entityInstance = AdyHook.getPrivateEntityManager(p).create(EntityTypes.SHULKER, p.location)
-        val megEntity = ModelEngineAPI.getModeledEntity(entityInstance.normalizeUniqueId)
-        val model = MegHook.getModel(machine.info.model)
-        megEntity.addModel(model, true)
-        map[p] = SummonObject(p, entityInstance, model, megEntity, machine)
+        val entity = p.world.spawnEntity(p.location, EntityType.SHULKER).apply {
+            this as Shulker
+            this.setAI(false)
+            this.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, Int.MAX_VALUE, 1, false, false, false))
+        }
+        val modeledEntity = ModelEngineAPI.createModeledEntity(entity)
+        val model = ModelEngineAPI.createActiveModel(machine.info.model)
+        modeledEntity.addModel(model, true)
+        map[p] = SummonObject(p, entity, modeledEntity, model, machine)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun onTick(runnable: BukkitRunnable) {
         map.values.toMutableList().forEach { summon ->
             if (summon.tooFar()) map.remove(summon.player)?.remove()
@@ -61,16 +68,16 @@ object SummonManager : EListener(PL) {
     // event handler
 
     @EventHandler
-    fun AdyeshachEntityInteractEvent.onEvent() {
+    fun PlayerInteractAtEntityEvent.onEvent() {
         map[player]?.let {
-            if (it.entityInstance == entity) it.onRightClick(this)
+            if (it.entity == rightClicked) it.onRightClick(this)
         }
     }
 
     @EventHandler
-    fun AdyeshachEntityDamageEvent.onEvent() {
-        map[player]?.let {
-            if (it.entityInstance == entity) it.onLeftClick(this)
+    fun EntityDamageByEntityEvent.onEvent() {
+        map[damager]?.let {
+            if (it.entity == entity) it.onLeftClick(this)
         }
     }
 
@@ -82,9 +89,9 @@ object SummonManager : EListener(PL) {
 
 class SummonObject(
     val player: Player,
-    val entityInstance: EntityInstance,
+    val entity: Entity,
+    val modeledEntity: ModeledEntity,
     val model: ActiveModel,
-    val modelEntity: ModeledEntity,
     val machine: Machine,
 ) {
     val machineName = machine.info.name
@@ -93,8 +100,8 @@ class SummonObject(
     var animationTask: BukkitTask? = null
     val animationHandler get() = model.animationHandler
 
-    fun onRightClick(event: AdyeshachEntityInteractEvent) {
-        if (!event.isMainHand) return
+    fun onRightClick(event: PlayerInteractAtEntityEvent) {
+        if (event.hand != EquipmentSlot.HAND) return
         val item = event.player.inventory.itemInMainHand
         if (item.type.isAir) {
             PL.sendMsgWithPrefix(player, Lang["message.empty_handed"])
@@ -119,18 +126,18 @@ class SummonObject(
         scheduleCraft()
     }
 
-    fun onLeftClick(event: AdyeshachEntityDamageEvent) {
+    fun onLeftClick(event: EntityDamageByEntityEvent) {
         if (items.isEmpty()) {
-            PL.sendMsgWithPrefix(event.player, Lang["message.empty_machine", "machine" to machineName])
+            PL.sendMsgWithPrefix(event.damager, Lang["message.empty_machine", "machine" to machineName])
             return
         }
         val item = items.removeLast()
         PL.debug { "玩家${player.name}从机器${machineName}中取出${item.type}" }
-        event.player.giveStickItem(item)
+        (event.damager as Player).giveStickItem(item)
         scheduleCraft()
     }
 
-    fun tooFar() = player.location.distance(entityInstance.getLocation()) > 15
+    fun tooFar() = player.location.distance(modeledEntity.base.location) > 15
 
     /**
      * 5秒不点击则尝试合成
@@ -141,6 +148,7 @@ class SummonObject(
         clickTask = PL.runTaskLater(100, ::onCraft)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onCraft(runnable: BukkitRunnable) {
         val entry = machine.recipes.entries.firstOrNull { it.value.matches(items) }
         if (entry == null) {
@@ -205,6 +213,6 @@ class SummonObject(
             animationTask = null
         }
         fail()
-        entityInstance.remove()
+        entity.remove()
     }
 }

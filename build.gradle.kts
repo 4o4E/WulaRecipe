@@ -26,8 +26,6 @@ repositories {
     maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
     // engine hub
     maven("https://maven.enginehub.org/repo/")
-    // ady
-    maven("https://repo.tabooproject.org/repository/releases/")
     // placeholderAPI
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     mavenCentral()
@@ -37,14 +35,13 @@ dependencies {
     // paper
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     // adventure
-    implementation("net.kyori:adventure-api:4.12.0")
+    compileOnly("net.kyori:adventure-api:4.12.0")
     // eplugin
     implementation(eplugin("core"))
     implementation(eplugin("menu"))
     implementation(eplugin("serialization"))
     implementation(eplugin("hook-mmoitems"))
     implementation(eplugin("hook-itemsadder"))
-    implementation(eplugin("hook-adyeshach"))
     implementation(eplugin("hook-modelengine"))
     implementation(eplugin("hook-placeholderapi"))
     // serialization
@@ -56,8 +53,6 @@ dependencies {
     compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
     // itemsadder
     compileOnly("com.github.LoneDev6:api-itemsadder:3.0.0")
-    // ady
-    compileOnly("ink.ptms.adyeshach:all:2.0.0-snapshot-10")
     // placeholderAPI
     compileOnly("me.clip:placeholderapi:2.11.6")
     // ModelEngine
